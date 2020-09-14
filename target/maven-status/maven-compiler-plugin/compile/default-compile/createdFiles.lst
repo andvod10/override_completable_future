@@ -1,0 +1,8 @@
+com/completablefuture/logging/MdcAwareCompletableFuture.class
+com/completablefuture/logging/MdcWrapperHelper.class
+com/completablefuture/AppVerticle.class
+com/completablefuture/logging/MdcAwareForkJoinPool.class
+com/completablefuture/logging/MdcAwareThreadPool.class
+com/completablefuture/ServerVerticle.class
+com/completablefuture/ConfigLoader.class
+com/completablefuture/CreateCmd.class
