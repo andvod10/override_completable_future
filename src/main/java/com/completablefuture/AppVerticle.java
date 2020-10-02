@@ -1,7 +1,6 @@
 package com.completablefuture;
 
 import com.completablefuture.logging.MdcAwareCompletableFuture;
-import com.completablefuture.logging.MdcWrapperHelper;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;

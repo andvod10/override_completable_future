@@ -1,10 +1,6 @@
 package com.completablefuture.logging;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static com.completablefuture.logging.MdcWrapperHelper.wrapWithMdcContext;
 
@@ -32,5 +28,11 @@ public class MdcAwareThreadPool extends ThreadPoolExecutor {
     @Override
     public void execute(Runnable command) {
         super.execute(wrapWithMdcContext(command));
+    }
+
+    public static ExecutorService newFixedThreadPool(int nThreads) {
+        return new MdcAwareThreadPool(nThreads, nThreads,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>());
     }
 }

@@ -48,12 +48,27 @@ public class MdcAwareCompletableFutureTest {
         MDC.put("gtid", txid);
         AtomicBoolean assertResult = new AtomicBoolean(false);
 
+        var exec = MdcAwareThreadPool.newFixedThreadPool(10);
+
         CompletableFuture<Void> result = MdcAwareCompletableFuture
                 .supplyAsync(() -> {
                     return assertTransactionId("supplyAsync");
                 })
                 .thenApply(s -> {
                     return assertTransactionId("thenApply");
+                })
+                .thenCompose(s -> {
+                    // a pretty reasonable use of CF
+                    // (e.g. could happen in an external library or framework)
+                    // breaks the transaction logging for future steps:
+                    var rv = new CompletableFuture<String>();
+                    for (int i = 0; i < 10; i++) {
+                        exec.submit(() -> {
+                            log.info("stage 3 : {}", txid);
+                            rv.complete("stage 3 : " + txid);
+                        });
+                    }
+                    return rv;
                 })
                 .thenCompose(s -> MdcAwareCompletableFuture.supplyAsync(() -> {
                     return assertTransactionId("thenCompose");
